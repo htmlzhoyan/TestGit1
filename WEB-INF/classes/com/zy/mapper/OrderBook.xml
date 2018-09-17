@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 使用对应的Dao层的接口 -->
+<mapper namespace="com.zy.dao.IOrderBook">
+
+	<resultMap type="OrderBook" id="orderBookMap">
+		<id property="iid" column="iid"/>
+		<!-- 其他字段的映射关系 -->
+		<result property="oid" column="oid" />
+		<result property="bid" column="bid" />
+		<result property="createdate" column="createdate" />
+		<result property="count" column="count" />
+		<result property="price" column="price" />
+		<result property="state" column="state" />
+		<result property="total_price" column="total_price" />
+		<association property="books" resultMap="com.zy.dao.IBooksDao.booksMap"></association>
+		<association property="order" resultMap="com.zy.dao.IOrderDao.orderMap"></association>
+	</resultMap>
+	
+
+	
+	<select id="findAllOrder" resultMap="orderBookMap" parameterType="string">
+		SELECT * from books b
+		INNER JOIN items i
+		on b.BID=i.BID
+		INNER JOIN orders o
+		on i.OID=o.OID WHERE USERNAME=#{username}
+	</select>
+	
+	<insert id="insertIntoOrder"  parameterType="OrderBook">
+		insert into items(iid,oid,bid,createdate,count,price,state,total_price) values(#{iid}, #{oid},#{bid}, #{createdate},#{count}, #{price},#{state}, #{total_price})
+	</insert>
+	
+</mapper>
+
+
+
+

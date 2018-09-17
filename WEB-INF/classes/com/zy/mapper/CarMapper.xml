@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 使用对应的Dao层的接口 -->
+<mapper namespace="com.zy.dao.ICarDao">
+
+	<resultMap type="Car" id="carMap">
+		<id property="id" column="id"/>
+		<!-- 其他字段的映射关系 -->
+		<result property="bid" column="bid" />
+		<result property="num" column="num" />
+		
+		<association property="books" resultMap="com.zy.dao.IBooksDao.booksMap">
+		</association>
+	</resultMap>
+	
+	
+	<insert id="insertCar" parameterType="java.util.List">
+		insert into car(bid,num) values
+		
+		<foreach collection="list" item="car" separator=",">
+			(#{car.bid},#{car.num})
+		</foreach>
+	
+		 
+	</insert>
+	
+	<select id="findAllCars" resultMap="carMap" parameterType="string">
+		SELECT * FROM Car c 
+		INNER JOIN books b
+		on c.BID=b.BID WHERE USERNAME=#{username}
+	</select>
+	
+	<select id="findCarsById" resultMap="carMap" parameterType="int">
+		select * from Car where id=#{id}	
+	</select>
+	
+</mapper>
+
+
+
+

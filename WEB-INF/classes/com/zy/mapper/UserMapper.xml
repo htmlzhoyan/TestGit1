@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 使用对应的Dao层的接口 -->
+<mapper namespace="com.zy.dao.IUserDao">
+
+	<resultMap type="User" id="userMap">
+		<id property="username" column="USERNAME"/>
+		<!-- 其他字段的映射关系 -->
+		<result property="password" column="PASSWORD" />
+		<result property="email" column="EMAIL" />
+	</resultMap>
+	
+	<select id="findAllUser"  parameterType="string" resultMap="userMap">
+		select * from userinfo where USERNAME=#{username}
+	</select>
+	
+	<insert id="registerUser"  parameterType="User">
+		insert into userinfo(username,password,email) values(#{username}, #{password}, #{email})
+	</insert>
+	
+</mapper>
+
+
+
+

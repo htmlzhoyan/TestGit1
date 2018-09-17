@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 使用对应的Dao层的接口 -->
+<mapper namespace="com.zy.dao.IBooksDao">
+
+	<resultMap type="Books" id="booksMap">
+		<id property="bid" column="BID"/>
+		<!-- 其他字段的映射关系 -->
+		<result property="bookname" column="BOOKNAME" />
+		<result property="bPrice" column="BPRICE" />
+		<result property="image" column="IMAGE" />
+		<result property="stock" column="STOCK" />
+	</resultMap>
+	
+	<select id="findAllBooks" resultMap="booksMap">
+		select * from books
+	</select>
+	
+	<select id="findBooksByName" resultMap="booksMap" parameterType="int">
+		select * from books where bid=#{bid}	
+	</select>
+	
+</mapper>
+
+
+
+

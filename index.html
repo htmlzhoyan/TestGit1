@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/handlebars.min.js"></script>
+<script type="text/javascript" src="./js/common.js"></script>
+</head>
+<body>
+<div id="header" class="wrap">
+	<div id="logo">网上书城</div>
+	<div id="navbar">
+		<div class="userMenu">
+			<ul>
+				<li class="current"><a href="index.html">首页</a></li>
+				<li><a href="orderlist.html">我的订单</a></li>
+				<li><a href="shopping.html">购物车</a></li>
+				<li><a href="javascript:void(0);" onclick="loginOut()">注销</a></li>
+			</ul>
+		</div>
+		<form method="get" name="search" action="">
+			搜索：<input class="input-text" type="text" name="keywords" /><input class="input-btn" type="submit" name="submit" value="" />
+		</form>
+	</div>
+</div>
+<div id="content" class="wrap">
+	<div class="list bookList">
+		<form method="post" name="shoping" action="shopping.html">
+			<table id="gouwuc">
+				
+				
+			</table>
+			<div class="page-spliter">
+				<a href="#">&lt;</a>
+				<a href="#">首页</a>
+				<span class="current">1</span>
+				<a href="#">2</a>
+				<a href="#">3</a>
+				<a href="#">4</a>
+				<span>...</span>
+				<a href="#">尾页</a>
+				<a href="#">&gt;</a>
+			</div>
+			<div class="button"><input onclick="insert()" class="input-btn" type="button" name="submit" value="" /></div>
+		</form>
+	</div>
+</div>
+<div id="footer" class="wrap">
+	XXXXXXXXX &copy; 版权所有
+</div>
+<script id="show-gous" type="text/x-handlebars-template">
+	<tr class="title">
+					<th class="checker"></th>
+					<th>购买数量</th>
+					<th>书名</th>
+					
+					<th class="price">价格</th>
+					<th class="store">库存</th>
+					<th class="view">图片预览</th>
+				</tr>
+	 {{#each list}}
+	<tr>
+		<td><input type="checkbox" name="bookId" value="{{bid}}"></td>
+		<td><input type="number" name="book" value="1"></td>
+					<td style="text-align: center;" class="title">{{bookname}}</td>
+					<td>￥{{b_price}}</td>
+					<td>{{stock}}</td>
+					<td class="thumb"><img src="{{image}}"></td>
+				</tr>
+	{{/each}}
+	</script>
+<script>
+
+function insert(){	
+	var valsid = [];
+	var valsnum = [];
+    $('input:checkbox:checked').each(function (index, item) {
+    	
+        var bid = $("input[type='checkbox']:checked").eq(index).val()
+        var num = $("input[name='book']").eq(index).val()
+        valsid.push(bid)
+        valsnum.push(num)
+   });
+
+
+	
+	console.log(valsid.toString())
+	$.ajax({
+		type:'POST',
+		url:"insertCar",
+		data:{
+			"dataid":valsid.toString(),
+			"datanum":valsnum.toString(),
+		},
+		dataType:"json",
+		success:function(data){
+			window.location.href =  "shopping.html"
+		}
+	})
+	
+	
+}
+$(function(){
+	var userhtml = $("#show-gous").html();
+	var template = Handlebars.compile(userhtml);
+	$.ajax({
+		type:'get',
+		url:"findGoods",
+		dataType:"json",
+		success:function(data){
+			$("#gouwuc").html(template({list:data.msg}));
+		}
+	})
+})
+
+</script>
+</body>
+</html>
